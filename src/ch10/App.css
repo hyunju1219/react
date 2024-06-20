@@ -1,0 +1,8 @@
+.table-style {
+    border-collapse: collapse;
+    border: 1px solid #dbdbdb;
+    font-size: 18px;
+}
+table td, th {
+    border: 1px solid #dbdbdb;
+}
