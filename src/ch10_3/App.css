@@ -8,3 +8,7 @@ th, td {
     border: 1px solid #dbdbdb;
     padding: 5px 10px;
 }
+
+input {
+    padding: 5px, 7px;
+}
