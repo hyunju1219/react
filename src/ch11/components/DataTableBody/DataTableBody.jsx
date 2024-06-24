@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "./style.css";
 
-function DataTableBody({ mode, products }) {
+function DataTableBody({ mode, setMode, products, setProducts, isDeleting, setDeleting }) {
     const [ viewProducts, setViewProducts ] = useState([]);
     
     //전체선택이 되어있는지 여부
@@ -9,8 +9,11 @@ function DataTableBody({ mode, products }) {
 
     //products와 mode의 값이 바뀔 때마다 호출
     useEffect(() => {
-        resetViewProducts(); //isChecked를 추가해 초기화
-        setCheckedAll(false); //전체선택 해제
+        if(mode === 0) {
+            resetViewProducts(); //isChecked를 추가해 초기화
+            setCheckedAll(false); //전체선택 해제
+        }
+        
     }, [products, mode]);
 
     //viewProducts의 값이 바뀔 때 호출(전체선택 체크박스, 그냥 체크박스들이 눌러질 때)
@@ -24,26 +27,40 @@ function DataTableBody({ mode, products }) {
         }
     }, [viewProducts]);
 
+    useEffect(() => {
+        if(isDeleting) {
+            setProducts([ ...viewProducts
+                .filter(viewProduct => viewProduct.isChecked === false)
+                .map(viewProduct => {
+                    const { isChecked, ...product } = viewProduct;
+                    return product;
+                })
+            ]);
+            setMode(0);
+            setDeleting(false);
+        }
+    }, [isDeleting])
+
     //체크 여부를 모두 false(선택안함)로 변경
     const resetViewProducts = () => {
         setViewProducts([ ...products.map(product => ({ ...product, isChecked: false })) ]);
     }
 
-
     //전체선택 체크박스의 값이 변경될 때
     const handleCheckedAllChange = (e) => {
+        console.log(checkedAll);
         setCheckedAll(checked => {
             if(!checked) { //checkedAll이 false일 때(체크안됨)
                 setViewProducts([ ...products.map(product => ({ ...product, isChecked: true })) ]); //모두 선택
             } else { 
-                resetViewProducts(); //모두 선택 해제
+                setViewProducts([ ...products.map(product => ({ ...product, isChecked: false })) ]);
             }
             return !checked;
         });
     }
 
     
-    //체크박스 선택할 때 호출
+    //체크박스 선택할 때 호출.
     const handleCheckedChange = (e) => {
         //수정일 때 하나만 선택되도록 한다.
         if(mode === 2) {
@@ -108,7 +125,7 @@ function DataTableBody({ mode, products }) {
                                 <th>
                                     <input 
                                         type="checkbox" 
-                                        isabled={mode === 0 || mode === 1} 
+                                        disabled={mode === 0 || mode === 1} 
                                         checked={product.isChecked}
                                         onChange={handleCheckedChange} 
                                         value={product.id} 
