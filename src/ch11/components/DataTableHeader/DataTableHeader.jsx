@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./style.css";
 import Swal from "sweetalert2";
 
-function DataTableHeader({ mode, setMode, setProducts, setDeleting }) {
+function DataTableHeader({ mode, setMode, products, setProducts, setDeleting, editProductId }) {
 
     const emptyProduct = {
         id: "",
@@ -19,6 +19,11 @@ function DataTableHeader({ mode, setMode, setProducts, setDeleting }) {
         price: useRef(),
     }
     const [ inputData, setInputData ] = useState({ ...emptyProduct });
+
+    useEffect(() => {
+        const [ product ] = products.filter(product => product.id === editProductId);
+        setInputData(!product ? { ...emptyProduct } : { ...product });
+    }, [editProductId]);
 
     const handleInputChange = (e) => {
         //괄호로 묶으면 값으로 리턴
@@ -76,7 +81,26 @@ function DataTableHeader({ mode, setMode, setProducts, setDeleting }) {
             resetMode();    
         }
         if(mode === 2) {
-            alert("상품수정");   
+            Swal.fire({
+                title: "상품 정보 수정",
+                showCancelButton: true,
+                confirmButtonText: "확인",
+                cancelButtonText: "취소",
+            }).then(() => {
+                setProducts(products => [
+                    ...products.map(product => {
+                        if(product.id === editProductId) {
+                            //inputData에서 id를 제외하고 rest에 대입,id를 유지하기 위해
+                            const { id, ...rest } = inputData
+                            return {
+                                ...product,
+                                ...rest //id를 제외한 값만 덮어쓴다.
+                            }
+                        }
+                        return product;
+                    })
+                ]);
+            });
         }
         if(mode === 3) {
            Swal.fire({

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./style.css";
 
-function DataTableBody({ mode, setMode, products, setProducts, isDeleting, setDeleting }) {
+function DataTableBody({ mode, setMode, products, setProducts, isDeleting, setDeleting, setEditProductId }) {
     const [ viewProducts, setViewProducts ] = useState([]);
     
     //전체선택이 되어있는지 여부
@@ -40,6 +40,13 @@ function DataTableBody({ mode, setMode, products, setProducts, isDeleting, setDe
             setDeleting(false);
         }
     }, [isDeleting])
+
+    useEffect(() => {
+        if(mode === 2) {
+            const [ selectedProduct ] = viewProducts.filter(product => product.isChecked);
+            setEditProductId(!selectedProduct ? 0 : selectedProduct.id);
+        } 
+    }, [viewProducts]);
 
     //체크 여부를 모두 false(선택안함)로 변경
     const resetViewProducts = () => {
