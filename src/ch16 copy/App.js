@@ -2,20 +2,19 @@ import { useEffect, useState } from "react";
 import "./App.css";
 function App() {
 
-    const emptyInput = {
+    const emptyProfile = {
         name: "",
-        email: ""
+        email: "",
+        imgSrc: ""
     }
 
-    const [ imgSrc, setImgSrc ] = useState("");
-    const [ inputData, setInputData ] = useState({ ...emptyInput });
+    const [ profile, setProfile ] = useState({ ...emptyProfile });
 
     useEffect(() => {
         const profile = localStorage.getItem("profile");
-        const { imgSrc, ...input } = !profile ?  "" : JSON.parse(profile);
-        setImgSrc(!imgSrc ? "" : imgSrc);
-        setInputData(!input ? { ...emptyInput } : input);
+        setProfile(!profile ?  "" : JSON.parse(profile));
     }, []);
+
 
     const handleImgClick = () => {
         const fileElement = document.createElement("input");
@@ -26,7 +25,12 @@ function App() {
             const filereader = new FileReader();
 
             filereader.onload = (e) => {
-                setImgSrc(e.target.result);
+                setProfile(profile => {
+                    return {
+                        ...profile,
+                        imgSrc: e.target.result
+                    }
+                });
             }
 
             filereader.readAsDataURL(file);
@@ -35,18 +39,15 @@ function App() {
     }
 
     const handleOnChange = (e) => {
-        const input = {
-            ...inputData,
-            [e.target.name]: e.target.value
-        }
-        setInputData(input);
+        setProfile(profile => {
+            return {
+                ...profile,
+                [e.target.name]: e.target.value
+            }
+        });
     }
 
     const handleButtonClick = (e) => {
-        const profile = {
-            ["imgSrc"]: imgSrc,
-            ...inputData
-        }
         localStorage.setItem("profile", JSON.stringify(profile));
         console.log(profile);
     }
@@ -56,12 +57,12 @@ function App() {
             <div className="profile">
                 <h1>프로필</h1>
                 <div onClick={handleImgClick} className="img-container">
-                    <img src={imgSrc} alt="" />
+                    <img src={profile.imgSrc} alt="" />
                 </div>
                 <div>이름</div>
-                <input type="text" name="name" onChange={handleOnChange} value={inputData.name}/>
+                <input type="text" name="name" onChange={handleOnChange} value={profile.name}/>
                 <div>이메일</div>
-                <input type="text" name="email" onChange={handleOnChange} value={inputData.email} />
+                <input type="text" name="email" onChange={handleOnChange} value={profile.email} />
                 <button onClick={handleButtonClick}>저장</button>
             </div>
         </div>
