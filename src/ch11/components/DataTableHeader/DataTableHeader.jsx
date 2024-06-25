@@ -102,9 +102,9 @@ function DataTableHeader({ mode, setMode, products, setProducts, setDeleting, ed
                             return product;
                         })
                     ]);
-                }               
+                    resetMode();
+                }              
             });
-            resetMode();
         }
         if(mode === 3) {
            Swal.fire({

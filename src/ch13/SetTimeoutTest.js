@@ -3,7 +3,7 @@ function SetTimeoutTest() {
      * 비동기
      */
 
-    //매개변수(콜백함수, 초)
+    //매개변수(콜백함수, 초), 최상위에 있어야함
     setTimeout(() => {
         print(count);
     }, 2000);
