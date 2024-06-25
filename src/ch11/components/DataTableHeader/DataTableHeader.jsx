@@ -18,6 +18,7 @@ function DataTableHeader({ mode, setMode, products, setProducts, setDeleting, ed
         color: useRef(),
         price: useRef(),
     }
+    
     const [ inputData, setInputData ] = useState({ ...emptyProduct });
 
     useEffect(() => {
@@ -86,21 +87,24 @@ function DataTableHeader({ mode, setMode, products, setProducts, setDeleting, ed
                 showCancelButton: true,
                 confirmButtonText: "확인",
                 cancelButtonText: "취소",
-            }).then(() => {
-                setProducts(products => [
-                    ...products.map(product => {
-                        if(product.id === editProductId) {
-                            //inputData에서 id를 제외하고 rest에 대입,id를 유지하기 위해
-                            const { id, ...rest } = inputData
-                            return {
-                                ...product,
-                                ...rest //id를 제외한 값만 덮어쓴다.
+            }).then(result => {
+                if(result.isConfirmed) {
+                    setProducts(products => [
+                        ...products.map(product => {
+                            if(product.id === editProductId) {
+                                //inputData에서 id를 제외하고 rest에 대입,id를 유지하기 위해
+                                const { id, ...rest } = inputData
+                                return {
+                                    ...product,
+                                    ...rest //id를 제외한 값만 덮어쓴다.
+                                }
                             }
-                        }
-                        return product;
-                    })
-                ]);
+                            return product;
+                        })
+                    ]);
+                }               
             });
+            resetMode();
         }
         if(mode === 3) {
            Swal.fire({
@@ -123,7 +127,7 @@ function DataTableHeader({ mode, setMode, products, setProducts, setDeleting, ed
     const handleCancleClick = () => {
         resetMode();
     }
-    //조회모드로 변경
+    //조회모드로 변경, input값 초기화
     const resetMode = () => {
         setMode(0);
         setInputData({ ...emptyProduct });
