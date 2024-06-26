@@ -9,13 +9,10 @@ function App(props) {
     return (
         <>
             <Global styles={reset}/>
-            <MainSidebar>
-
-            </MainSidebar>
             <MainLayout>
                 <MainHeader />
-                
-            </MainLayout>
+                <MainSidebar />
+           </MainLayout>
         </>
     );
 }

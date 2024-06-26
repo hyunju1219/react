@@ -1,10 +1,13 @@
 /** @jsxImportSource @emotion/react */
+import MainSidebarBody from './MainSidebarBody/MainSidebarBody';
+import MainSidebarHeader from './MainSidebarHeader/MainSidebarHeader';
 import * as s from './style';
 
-function MainSidebar({ children }) {
+function MainSidebar() {
     return (
-        <div>
-            { children }
+        <div css={s.layout}>
+            <MainSidebarHeader />
+            <MainSidebarBody />
         </div>
     );
 }
