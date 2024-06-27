@@ -105,20 +105,23 @@ function App() {
 
     return <>
         <input name="username" placeholder="사용자이름" 
-        onKeyDown={handleInputKeyDown} 
-        onChange={handleInputChange}
-        value={inputData.username}
-        ref={inputRef.username} />
+            onKeyDown={handleInputKeyDown} 
+            onChange={handleInputChange}
+            value={inputData.username}
+            ref={inputRef.username} 
+        />
         <input name="password" placeholder="패스워드" 
-        onKeyDown={handleInputKeyDown} 
-        onChange={handleInputChange}
-        value={inputData.password}
-        ref={inputRef.password} />
+            onKeyDown={handleInputKeyDown} 
+            onChange={handleInputChange}
+            value={inputData.password}
+            ref={inputRef.password} 
+        />
         <input name="name" placeholder="이름" 
-        onKeyDown={handleInputKeyDown} 
-        onChange={handleInputChange}
-        value={inputData.name}
-        ref={inputRef.name} />
+            onKeyDown={handleInputKeyDown} 
+            onChange={handleInputChange}
+            value={inputData.name}
+            ref={inputRef.name} 
+        />
 
         <table>
             <thead>
